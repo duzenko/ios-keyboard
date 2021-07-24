@@ -9,9 +9,6 @@ import UIKit
 
 class KeyboardViewController: UIInputViewController {
 
-    @IBOutlet var nextKeyboardButton: UIButton!
-    @IBOutlet var row123: UIStackView!
-
     override func updateViewConstraints() {
         super.updateViewConstraints()
         
@@ -20,33 +17,6 @@ class KeyboardViewController: UIInputViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        // Perform custom UI setup here
-        self.nextKeyboardButton = UIButton(type: .system)
-        
-        self.nextKeyboardButton.setTitle(NSLocalizedString("Next Keyboard", comment: "Title for 'Next Keyboard' button"), for: [])
-        self.nextKeyboardButton.sizeToFit()
-        self.nextKeyboardButton.translatesAutoresizingMaskIntoConstraints = false
-        
-        self.nextKeyboardButton.addTarget(self, action: #selector(handleInputModeList(from:with:)), for: .allTouchEvents)
-        
-        self.view.addSubview(self.nextKeyboardButton)
-        
-        self.nextKeyboardButton.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
-        self.nextKeyboardButton.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
-        
-        self.row123 = UIStackView()
-        self.row123.alignment = .fill
-        self.row123.distribution = .fillEqually
-        self.row123.spacing = 8.0
-        
-        for item in 1...10 {
-            let btn = UIButton(type: .system)
-            btn.setTitle(NSLocalizedString(String(item), comment: "123"), for: [])
-            btn.translatesAutoresizingMaskIntoConstraints = false
-            row123.addArrangedSubview(btn)
-            
-        }
         makeABCbtns()
     }
     
@@ -57,7 +27,8 @@ class KeyboardViewController: UIInputViewController {
         ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"],
         ["A", "S", "D", "F", "G", "H", "J", "K", "L", "\\"],
         ["Z", "X", "C", "V", "B", "N", "M", ",", ".", "/"],
-        ["↑", " ", "GO"],
+        [//"↑",
+            "←", " ", "GO"],
       ]
       var groups = [UIStackView]()
 
@@ -65,15 +36,22 @@ class KeyboardViewController: UIInputViewController {
         let group = createButtons(named: i)
         let subStackView = UIStackView(arrangedSubviews: group)
         subStackView.axis = .horizontal
-        subStackView.distribution = .fillEqually
-        subStackView.spacing = 1
+        subStackView.distribution = .fillProportionally
+        subStackView.spacing = 2
+        if i.contains(" ") {
+            for (index, element) in subStackView.subviews.enumerated() {
+                if index != 1 {
+                    element.widthAnchor.constraint(equalTo: subStackView.subviews[1].widthAnchor, multiplier: 0.5).isActive = true
+                }
+            }
+        }
         groups.append(subStackView)
       }
 
       let stackView = UIStackView(arrangedSubviews: groups)
       stackView.axis = .vertical
       stackView.distribution = .fillEqually
-      stackView.spacing = 1
+      stackView.spacing = 2
       stackView.translatesAutoresizingMaskIntoConstraints = false
 
       abcBtnView.addSubview(stackView)
@@ -91,12 +69,26 @@ class KeyboardViewController: UIInputViewController {
         button.setTitle(letter, for: .normal)
         button.backgroundColor = .white
         button.setTitleColor( .black , for: .normal)
+        button.addTarget(self, action: #selector(buttonAction), for: .touchUpInside)
         return button
       }
     }
     
+    @objc func buttonAction(sender: UIButton!) {
+        let proxy = self.textDocumentProxy
+        let key = sender.title(for: .normal)!.lowercased()
+        switch key {
+        case "←":
+            proxy.deleteBackward()
+        case "go":
+            proxy.insertText("\n")
+        default:
+            proxy.insertText(key)
+        }
+    }
+    
     override func viewWillLayoutSubviews() {
-        self.nextKeyboardButton.isHidden = true //!self.needsInputModeSwitchKey
+        print(self.needsInputModeSwitchKey)
         super.viewWillLayoutSubviews()
     }
     
@@ -106,15 +98,7 @@ class KeyboardViewController: UIInputViewController {
     
     override func textDidChange(_ textInput: UITextInput?) {
         // The app has just changed the document's contents, the document context has been updated.
-        
-        var textColor: UIColor
-        let proxy = self.textDocumentProxy
-        if proxy.keyboardAppearance == UIKeyboardAppearance.dark {
-            textColor = UIColor.white
-        } else {
-            textColor = UIColor.black
-        }
-        self.nextKeyboardButton.setTitleColor(textColor, for: [])
+        print(self.textDocumentProxy.keyboardAppearance!)
     }
 
 }
