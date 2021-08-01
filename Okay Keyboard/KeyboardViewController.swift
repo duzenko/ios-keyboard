@@ -9,10 +9,10 @@ import UIKit
 
 class KeyboardViewController: UIInputViewController {
 
+    var popUpView: UIView?
+    
     override func updateViewConstraints() {
         super.updateViewConstraints()
-        
-        // Add custom view sizing constraints here
     }
     
     override func viewDidLoad() {
@@ -37,7 +37,7 @@ class KeyboardViewController: UIInputViewController {
             let subStackView = UIStackView(arrangedSubviews: group)
             subStackView.axis = .horizontal
             subStackView.distribution = .fillProportionally
-            subStackView.spacing = 2
+            subStackView.spacing = 4
             if i.contains(" ") {
                 for (index, element) in subStackView.subviews.enumerated() {
                     if index != 1 {
@@ -51,7 +51,7 @@ class KeyboardViewController: UIInputViewController {
         let stackView = UIStackView(arrangedSubviews: groups)
         stackView.axis = .vertical
         stackView.distribution = .fillEqually
-        stackView.spacing = 2
+        stackView.spacing = 4
         stackView.translatesAutoresizingMaskIntoConstraints = false
         
         abcBtnView.addSubview(stackView)
@@ -70,8 +70,60 @@ class KeyboardViewController: UIInputViewController {
         button.backgroundColor = .white
         button.setTitleColor( .black , for: .normal)
         button.addTarget(self, action: #selector(buttonAction), for: .touchUpInside)
+        let longTouchRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(onButtonLongPressed))
+//        longTouchRecognizer.cancelsTouchesInView = false
+        button.addGestureRecognizer(longTouchRecognizer)
         return button
       }
+    }
+    
+    @objc func onButtonLongPressed (_ longPressGesture: UILongPressGestureRecognizer)
+    {
+        if (longPressGesture.state == .changed) {
+            let tapLocation = longPressGesture.location(in: popUpView)
+            let btnIndex = Int(tapLocation.x) / Int(longPressGesture.view!.frame.width)
+            for (index, element) in popUpView!.subviews.enumerated() {
+                element.backgroundColor = index == btnIndex ? UIColor.green : UIColor.white
+            }
+        }
+        if (longPressGesture.state == .ended) {
+            let proxy = self.textDocumentProxy
+            for element in popUpView!.subviews {
+                if(element.backgroundColor==UIColor.green) {
+                    proxy.insertText((element as! UIButton).title(for: .normal)!)
+                }
+            }
+            popUpView?.removeFromSuperview()
+        }
+        if (longPressGesture.state == .began)
+        {
+            guard let btn = longPressGesture.view as! UIButton? else { return }
+            let tapLocation = longPressGesture.location(in: self.view)
+            let w = btn.frame.width
+            let h = btn.frame.height
+            
+            let popUpView=UIView(frame: CGRect(x: tapLocation.x-w, y: tapLocation.y-h*1.5, width: w*2, height: h))
+            self.popUpView = popUpView
+            popUpView.backgroundColor=UIColor.white
+            
+            let btn0: UIButton=UIButton(frame: CGRect(x: 0, y: 0, width: w, height: h))
+            btn0.setTitle(btn.title(for: .normal)!.uppercased(), for: .normal)
+            btn0.setTitleColor(UIColor.black, for: .normal);
+            btn0.layer.borderWidth=0.5
+            btn0.layer.borderColor=UIColor.lightGray.cgColor
+            
+            popUpView.addSubview(btn0)
+            
+            let btn1: UIButton=UIButton(frame: CGRect(x: w, y: 0, width: w, height: h))
+            btn1.setTitle(btn.title(for: .normal)!.lowercased(), for: .normal)
+            btn1.setTitleColor(UIColor.black, for: .normal);
+            btn1.layer.borderWidth=0.5
+            btn1.layer.borderColor=UIColor.lightGray.cgColor
+            
+            popUpView.addSubview(btn1)
+                
+            self.view.addSubview(popUpView)
+        }
     }
     
     @objc func buttonAction(sender: UIButton!) {
@@ -101,7 +153,7 @@ class KeyboardViewController: UIInputViewController {
     }
     
     override func viewWillLayoutSubviews() {
-        print(self.needsInputModeSwitchKey)
+        //print(self.needsInputModeSwitchKey)
         super.viewWillLayoutSubviews()
     }
     
