@@ -22,44 +22,44 @@ class KeyboardViewController: UIInputViewController {
     
     private func makeABCbtns(){
         let abcBtnView = self.view!
-      let list = [
-        ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"],
-        ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"],
-        ["A", "S", "D", "F", "G", "H", "J", "K", "L", "\\"],
-        ["Z", "X", "C", "V", "B", "N", "M", ",", ".", "/"],
-        [//"↑",
-            "←", " ", "GO"],
-      ]
-      var groups = [UIStackView]()
-
-      for i in list {
-        let group = createButtons(named: i)
-        let subStackView = UIStackView(arrangedSubviews: group)
-        subStackView.axis = .horizontal
-        subStackView.distribution = .fillProportionally
-        subStackView.spacing = 2
-        if i.contains(" ") {
-            for (index, element) in subStackView.subviews.enumerated() {
-                if index != 1 {
-                    element.widthAnchor.constraint(equalTo: subStackView.subviews[1].widthAnchor, multiplier: 0.5).isActive = true
+        let list = [
+            ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"],
+            ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"],
+            ["A", "S", "D", "F", "G", "H", "J", "K", "L", "\\"],
+            ["Z", "X", "C", "V", "B", "N", "M", ",", ".", "/"],
+            [//"↑",
+                "←", " ", "GO"],
+        ]
+        var groups = [UIStackView]()
+        
+        for i in list {
+            let group = createButtons(named: i)
+            let subStackView = UIStackView(arrangedSubviews: group)
+            subStackView.axis = .horizontal
+            subStackView.distribution = .fillProportionally
+            subStackView.spacing = 2
+            if i.contains(" ") {
+                for (index, element) in subStackView.subviews.enumerated() {
+                    if index != 1 {
+                        element.widthAnchor.constraint(equalTo: subStackView.subviews[1].widthAnchor, multiplier: 0.5).isActive = true
+                    }
                 }
             }
+            groups.append(subStackView)
         }
-        groups.append(subStackView)
-      }
-
-      let stackView = UIStackView(arrangedSubviews: groups)
-      stackView.axis = .vertical
-      stackView.distribution = .fillEqually
-      stackView.spacing = 2
-      stackView.translatesAutoresizingMaskIntoConstraints = false
-
-      abcBtnView.addSubview(stackView)
-
-      stackView.leadingAnchor.constraint (equalTo: abcBtnView.leadingAnchor,  constant: 0).isActive = true
-      stackView.topAnchor.constraint     (equalTo: abcBtnView.topAnchor,      constant: 0).isActive = true
-      stackView.trailingAnchor.constraint(equalTo: abcBtnView.trailingAnchor, constant: 0).isActive = true
-      stackView.bottomAnchor.constraint  (equalTo: abcBtnView.bottomAnchor,   constant: 0).isActive = true
+        
+        let stackView = UIStackView(arrangedSubviews: groups)
+        stackView.axis = .vertical
+        stackView.distribution = .fillEqually
+        stackView.spacing = 2
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        
+        abcBtnView.addSubview(stackView)
+        
+        stackView.leadingAnchor.constraint (equalTo: abcBtnView.leadingAnchor,  constant: 0).isActive = true
+        stackView.topAnchor.constraint     (equalTo: abcBtnView.topAnchor,      constant: 0).isActive = true
+        stackView.trailingAnchor.constraint(equalTo: abcBtnView.trailingAnchor, constant: 0).isActive = true
+        stackView.bottomAnchor.constraint  (equalTo: abcBtnView.bottomAnchor,   constant: 0).isActive = true
     }
 
     func createButtons(named: [String]) -> [UIButton]{
@@ -76,13 +76,26 @@ class KeyboardViewController: UIInputViewController {
     
     @objc func buttonAction(sender: UIButton!) {
         let proxy = self.textDocumentProxy
-        let key = sender.title(for: .normal)!.lowercased()
+        var key = sender.title(for: .normal)!.uppercased()
         switch key {
         case "←":
             proxy.deleteBackward()
-        case "go":
+        case "GO":
             proxy.insertText("\n")
         default:
+            if let contents = proxy.documentContextBeforeInput {
+                outerLoop: for char in contents.reversed() {
+                    switch char {
+                    case " ":
+                        break;
+                    case ".", "\n":
+                        break outerLoop
+                    default:
+                        key = key.lowercased()
+                        break outerLoop
+                    }
+                }
+            }
             proxy.insertText(key)
         }
     }
@@ -93,12 +106,14 @@ class KeyboardViewController: UIInputViewController {
     }
     
     override func textWillChange(_ textInput: UITextInput?) {
+        print(textInput==nil)
         // The app is about to change the document's contents. Perform any preparation here.
     }
     
     override func textDidChange(_ textInput: UITextInput?) {
         // The app has just changed the document's contents, the document context has been updated.
         print(self.textDocumentProxy.keyboardAppearance!)
-    }
+        print(textInput==nil)
+ }
 
 }
