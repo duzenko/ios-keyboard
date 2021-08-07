@@ -22,18 +22,19 @@ class KeyboardViewController: UIInputViewController {
     
     private func makeABCbtns(){
         let abcBtnView = self.view!
-        let list = [
-            ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"],
-            ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"],
-            ["A", "S", "D", "F", "G", "H", "J", "K", "L", "\\"],
-            ["Z", "X", "C", "V", "B", "N", "M", ",", ".", "/"],
-            [//"↑",
-                "←", " ", "GO"],
-        ]
+//        let list = [
+//            ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"],
+//            ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"],
+//            ["A", "S", "D", "F", "G", "H", "J", "K", "L", "\\"],
+//            ["Z", "X", "C", "V", "B", "N", "M", ",", ".", "/"],
+//            [//"↑",
+//                "←", " ", "GO"],
+//        ]
         var groups = [UIStackView]()
         
-        for i in list {
-            let group = createButtons(named: i)
+        for row in [0...4] {
+            let rowKeys = EnglishLayout[row*10..<row*10+10]
+            let group = createButtons(named: rowKeys)
             let subStackView = UIStackView(arrangedSubviews: group)
             subStackView.axis = .horizontal
             subStackView.distribution = .fillProportionally
