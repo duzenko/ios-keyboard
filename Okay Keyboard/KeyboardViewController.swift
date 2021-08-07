@@ -31,7 +31,7 @@ class KeyboardViewController: UIInputViewController {
                 let rowEnd = row*10+10
                 rowKeys = Array(EnglishLayout[rowStart..<rowEnd])
             }
-            let group = createButtons(named: rowKeys)
+            let group = createButtons(rowKeys, row<4)
             let subStackView = UIStackView(arrangedSubviews: group)
             subStackView.axis = .horizontal
             subStackView.distribution = .fillProportionally
@@ -60,11 +60,26 @@ class KeyboardViewController: UIInputViewController {
         stackView.bottomAnchor.constraint  (equalTo: abcBtnView.bottomAnchor,   constant: 0).isActive = true
     }
 
-    func createButtons(named: [[String]]) -> [UIButton] {
+    func createButtons(_ named: [[String]], _ withOptions: Bool) -> [UIButton] {
       return named.map { symbols in
+        let attributedString = NSMutableAttributedString(string:"\(symbols[0])")
+        let attrs = [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 9.0)]
+        if withOptions {
+            let gString = NSMutableAttributedString(string:"\n", attributes:attrs)
+            attributedString.append(gString)
+            for (index, symbol) in symbols.enumerated() {
+                if index==0 {
+                    continue
+                }
+                let gString = NSMutableAttributedString(string:symbol, attributes:attrs)
+                attributedString.append(gString)
+            }
+        }
+        
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle(symbols[0], for: .normal)
+        button.titleLabel?.lineBreakMode = .byWordWrapping
+        button.setAttributedTitle(attributedString, for: .normal)
         button.backgroundColor = .white
         button.setTitleColor( .black , for: .normal)
         button.addTarget(self, action: #selector(buttonAction), for: .touchUpInside)
@@ -76,14 +91,14 @@ class KeyboardViewController: UIInputViewController {
     
     @objc func onButtonLongPressed (_ longPressGesture: UILongPressGestureRecognizer)
     {
-        if (longPressGesture.state == .changed) {
+        if (longPressGesture.state == .changed && popUpView != nil) {
             let tapLocation = longPressGesture.location(in: popUpView)
             let btnIndex = Int(tapLocation.x) / Int(longPressGesture.view!.frame.width)
             for (index, element) in popUpView!.subviews.enumerated() {
                 element.backgroundColor = index == btnIndex ? UIColor.green : UIColor.white
             }
         }
-        if (longPressGesture.state == .ended) {
+        if (longPressGesture.state == .ended && popUpView != nil) {
             let proxy = self.textDocumentProxy
             for element in popUpView!.subviews {
                 if(element.backgroundColor==UIColor.green) {
@@ -96,8 +111,10 @@ class KeyboardViewController: UIInputViewController {
         {
             guard let btn = longPressGesture.view as! UIButton? else { return }
             var options: [String] = []
+            let x = btn.attributedTitle(for: .normal)!.string
+            let symbol = "\(x[x.startIndex])"
             for key in EnglishLayout {
-                if key[0]==btn.title(for: .normal) {
+                if key[0] == symbol {
                     options = key
                     break
                 }
@@ -134,12 +151,15 @@ class KeyboardViewController: UIInputViewController {
     
     @objc func buttonAction(sender: UIButton!) {
         let proxy = self.textDocumentProxy
-        var key = sender.title(for: .normal)!.uppercased()
+        let title = sender.attributedTitle(for: .normal)!.string
+        if title=="GO" {
+            proxy.insertText("\n")
+            return
+        }
+        var key = title[title.startIndex].uppercased()
         switch key {
         case "←":
             proxy.deleteBackward()
-        case "GO":
-            proxy.insertText("\n")
         default:
             if let contents = proxy.documentContextBeforeInput {
                 outerLoop: for char in contents.reversed() {
