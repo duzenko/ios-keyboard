@@ -22,24 +22,21 @@ class KeyboardViewController: UIInputViewController {
     
     private func makeABCbtns(){
         let abcBtnView = self.view!
-//        let list = [
-//            ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"],
-//            ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"],
-//            ["A", "S", "D", "F", "G", "H", "J", "K", "L", "\\"],
-//            ["Z", "X", "C", "V", "B", "N", "M", ",", ".", "/"],
-//            [//"↑",
-//                "←", " ", "GO"],
-//        ]
         var groups = [UIStackView]()
         
-        for row in [0...4] {
-            let rowKeys = EnglishLayout[row*10..<row*10+10]
+        for row in 0...4 {
+            var rowKeys: [[String]] = ["←", " ", "GO"].unflat()
+            if row<4 {
+                let rowStart = row*10
+                let rowEnd = row*10+10
+                rowKeys = Array(EnglishLayout[rowStart..<rowEnd])
+            }
             let group = createButtons(named: rowKeys)
             let subStackView = UIStackView(arrangedSubviews: group)
             subStackView.axis = .horizontal
             subStackView.distribution = .fillProportionally
             subStackView.spacing = 4
-            if i.contains(" ") {
+            if row == 4 {
                 for (index, element) in subStackView.subviews.enumerated() {
                     if index != 1 {
                         element.widthAnchor.constraint(equalTo: subStackView.subviews[1].widthAnchor, multiplier: 0.5).isActive = true
@@ -63,16 +60,15 @@ class KeyboardViewController: UIInputViewController {
         stackView.bottomAnchor.constraint  (equalTo: abcBtnView.bottomAnchor,   constant: 0).isActive = true
     }
 
-    func createButtons(named: [String]) -> [UIButton]{
-      return named.map { letter in
+    func createButtons(named: [[String]]) -> [UIButton] {
+      return named.map { symbols in
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle(letter, for: .normal)
+        button.setTitle(symbols[0], for: .normal)
         button.backgroundColor = .white
         button.setTitleColor( .black , for: .normal)
         button.addTarget(self, action: #selector(buttonAction), for: .touchUpInside)
         let longTouchRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(onButtonLongPressed))
-//        longTouchRecognizer.cancelsTouchesInView = false
         button.addGestureRecognizer(longTouchRecognizer)
         return button
       }
@@ -99,30 +95,39 @@ class KeyboardViewController: UIInputViewController {
         if (longPressGesture.state == .began)
         {
             guard let btn = longPressGesture.view as! UIButton? else { return }
+            var options: [String] = []
+            for key in EnglishLayout {
+                if key[0]==btn.title(for: .normal) {
+                    options = key
+                    break
+                }
+            }
+            if options.isEmpty {
+                return
+            }
+            let lowerCase = options[0].lowercased()
+            if lowerCase != options[0] {
+                options.insert(lowerCase, at: 1)
+            }
+            
             let tapLocation = longPressGesture.location(in: self.view)
             let w = btn.frame.width
             let h = btn.frame.height
             
-            let popUpView=UIView(frame: CGRect(x: tapLocation.x-w, y: tapLocation.y-h*1.5, width: w*2, height: h))
+            let popUpView=UIView(frame: CGRect(x: tapLocation.x-w*CGFloat(options.count)/2, y: tapLocation.y-h*1.5, width: w*CGFloat(options.count), height: h))
             self.popUpView = popUpView
             popUpView.backgroundColor=UIColor.white
             
-            let btn0: UIButton=UIButton(frame: CGRect(x: 0, y: 0, width: w, height: h))
-            btn0.setTitle(btn.title(for: .normal)!.uppercased(), for: .normal)
-            btn0.setTitleColor(UIColor.black, for: .normal);
-            btn0.layer.borderWidth=0.5
-            btn0.layer.borderColor=UIColor.lightGray.cgColor
-            
-            popUpView.addSubview(btn0)
-            
-            let btn1: UIButton=UIButton(frame: CGRect(x: w, y: 0, width: w, height: h))
-            btn1.setTitle(btn.title(for: .normal)!.lowercased(), for: .normal)
-            btn1.setTitleColor(UIColor.black, for: .normal);
-            btn1.layer.borderWidth=0.5
-            btn1.layer.borderColor=UIColor.lightGray.cgColor
-            
-            popUpView.addSubview(btn1)
+            for (index, option) in options.enumerated() {
+                let btn0: UIButton=UIButton(frame: CGRect(x: CGFloat(index)*w, y: 0, width: w, height: h))
+                btn0.setTitle(option, for: .normal)
+                btn0.setTitleColor(UIColor.black, for: .normal);
+                btn0.layer.borderWidth=0.5
+                btn0.layer.borderColor=UIColor.lightGray.cgColor
                 
+                popUpView.addSubview(btn0)
+            }
+                           
             self.view.addSubview(popUpView)
         }
     }

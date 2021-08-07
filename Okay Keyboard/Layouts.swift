@@ -22,44 +22,41 @@ struct KeyOption {
 }
 
 extension Array {
-    func unflattening(dim: Int = 1) -> [[Element]] {
-        let hasRemainder = !count.isMultiple(of: dim)
-        
-        var result = [[Element]]()
-        let size = count / dim
-        result.reserveCapacity(size + (hasRemainder ? 1 : 0))
-        for i in 0..<size {
-            result.append(Array(self[i*dim..<(i + 1) * dim]))
-        }
-        if hasRemainder {
-            result.append(Array(self[(size * dim)...]))
-        }
-        return result
+    func unflat() -> [[Element]] {
+        return self.map{[$0]}
     }
 }
 
-
 let EnglishLayout = [
-    ["1", "!"],
-    ["2", "@"],
-    ["3", "#"],
-    ["4", "$"],
-    ["5", "%"],
-    ["6", "^"],
-    ["7", "&"],
-    ["8", "*"],
-    ["9", "(", "-", "_"],
-    ["0", ")", "=", "+"],
-    ["Q", "`", "~"]
-] + ["W", "E", "R", "T", "Y", "U", "I"].unflattening() + [
-    ["O", "[", "{"],
-    ["P", "]", "}"],
-] + ["A", "S", "D", "F", "G", "H", "J"].unflattening() + [
-    ["K", ";", ":"],
-    ["L", "'", "\""],
-    ["\\", "|"],
-] + ["Z", "X", "C", "V", "B", "N", "M"].unflattening() + [
-    [",", "<"],
-    [".", ">"],
-    ["/", "?"],
-]
+    [
+        ["1", "!"],
+        ["2", "@"],
+        ["3", "#"],
+        ["4", "$"],
+        ["5", "%"],
+        ["6", "^"],
+        ["7", "&"],
+        ["8", "*"],
+        ["9", "(", "-", "_"],
+        ["0", ")", "=", "+"],
+        ["Q", "`", "~"]
+    ],
+    ["W", "E", "R", "T", "Y", "U", "I"].unflat(),
+    [
+        ["O", "[", "{"],
+        ["P", "]", "}"],
+    ],
+    ["A", "S", "D", "F", "G", "H", "J"].unflat(),
+    [
+        ["K", ";", ":"],
+        ["L", "'", "\""],
+        ["\\", "|"],
+    ],
+    ["Z", "X", "C", "V", "B", "N", "M"].unflat(),
+    [
+        [",", "<"],
+        [".", ">"],
+        ["/", "?"],
+    ]
+    
+].flatMap({ $0 })
