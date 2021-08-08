@@ -7,14 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0012C23C26A43CC400476A6F /* Okay_KeyboardApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0012C22926A43CC300476A6F /* Okay_KeyboardApp.swift */; };
-		0012C23D26A43CC400476A6F /* Okay_KeyboardApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0012C22926A43CC300476A6F /* Okay_KeyboardApp.swift */; };
+		0012C23C26A43CC400476A6F /* PC_KeyboardApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0012C22926A43CC300476A6F /* PC_KeyboardApp.swift */; };
+		0012C23D26A43CC400476A6F /* PC_KeyboardApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0012C22926A43CC300476A6F /* PC_KeyboardApp.swift */; };
 		0012C23E26A43CC400476A6F /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0012C22A26A43CC300476A6F /* ContentView.swift */; };
 		0012C23F26A43CC400476A6F /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0012C22A26A43CC300476A6F /* ContentView.swift */; };
 		0012C24026A43CC400476A6F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0012C22B26A43CC400476A6F /* Assets.xcassets */; };
 		0012C24126A43CC400476A6F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0012C22B26A43CC400476A6F /* Assets.xcassets */; };
 		0012C25326A43D0F00476A6F /* KeyboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0012C25226A43D0F00476A6F /* KeyboardViewController.swift */; };
-		0012C25726A43D0F00476A6F /* Okay Keyboard.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 0012C25026A43D0F00476A6F /* Okay Keyboard.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		0012C25726A43D0F00476A6F /* PC Keyboard.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 0012C25026A43D0F00476A6F /* PC Keyboard.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		0049E45526B69CDA009774A6 /* Layouts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0049E45426B69CDA009774A6 /* Layouts.swift */; };
 /* End PBXBuildFile section */
 
@@ -35,7 +35,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				0012C25726A43D0F00476A6F /* Okay Keyboard.appex in Embed App Extensions */,
+				0012C25726A43D0F00476A6F /* PC Keyboard.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -43,15 +43,15 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		0012C22926A43CC300476A6F /* Okay_KeyboardApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Okay_KeyboardApp.swift; sourceTree = "<group>"; };
+		0012C22926A43CC300476A6F /* PC_KeyboardApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PC_KeyboardApp.swift; sourceTree = "<group>"; };
 		0012C22A26A43CC300476A6F /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		0012C22B26A43CC400476A6F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		0012C23026A43CC400476A6F /* Okay Keyboard App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Okay Keyboard App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		0012C23026A43CC400476A6F /* PC Keyboard App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "PC Keyboard App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0012C23326A43CC400476A6F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		0012C23826A43CC400476A6F /* Okay Keyboard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Okay Keyboard.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		0012C23826A43CC400476A6F /* PC  Keyboard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "PC  Keyboard.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0012C23A26A43CC400476A6F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0012C23B26A43CC400476A6F /* macOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = macOS.entitlements; sourceTree = "<group>"; };
-		0012C25026A43D0F00476A6F /* Okay Keyboard.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Okay Keyboard.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		0012C25026A43D0F00476A6F /* PC Keyboard.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "PC Keyboard.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0012C25226A43D0F00476A6F /* KeyboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardViewController.swift; sourceTree = "<group>"; };
 		0012C25426A43D0F00476A6F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0049E45426B69CDA009774A6 /* Layouts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Layouts.swift; sourceTree = "<group>"; };
@@ -88,7 +88,7 @@
 				0012C22826A43CC300476A6F /* Shared */,
 				0012C23226A43CC400476A6F /* iOS */,
 				0012C23926A43CC400476A6F /* macOS */,
-				0012C25126A43D0F00476A6F /* Okay Keyboard */,
+				0012C25126A43D0F00476A6F /* PC Keyboard */,
 				0012C23126A43CC400476A6F /* Products */,
 			);
 			sourceTree = "<group>";
@@ -96,7 +96,7 @@
 		0012C22826A43CC300476A6F /* Shared */ = {
 			isa = PBXGroup;
 			children = (
-				0012C22926A43CC300476A6F /* Okay_KeyboardApp.swift */,
+				0012C22926A43CC300476A6F /* PC_KeyboardApp.swift */,
 				0012C22A26A43CC300476A6F /* ContentView.swift */,
 				0012C22B26A43CC400476A6F /* Assets.xcassets */,
 			);
@@ -106,9 +106,9 @@
 		0012C23126A43CC400476A6F /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				0012C23026A43CC400476A6F /* Okay Keyboard App.app */,
-				0012C23826A43CC400476A6F /* Okay Keyboard.app */,
-				0012C25026A43D0F00476A6F /* Okay Keyboard.appex */,
+				0012C23026A43CC400476A6F /* PC Keyboard App.app */,
+				0012C23826A43CC400476A6F /* PC  Keyboard.app */,
+				0012C25026A43D0F00476A6F /* PC Keyboard.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -130,22 +130,22 @@
 			path = macOS;
 			sourceTree = "<group>";
 		};
-		0012C25126A43D0F00476A6F /* Okay Keyboard */ = {
+		0012C25126A43D0F00476A6F /* PC Keyboard */ = {
 			isa = PBXGroup;
 			children = (
 				0012C25226A43D0F00476A6F /* KeyboardViewController.swift */,
 				0012C25426A43D0F00476A6F /* Info.plist */,
 				0049E45426B69CDA009774A6 /* Layouts.swift */,
 			);
-			path = "Okay Keyboard";
+			path = "PC Keyboard";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		0012C22F26A43CC400476A6F /* Okay Keyboard (iOS) */ = {
+		0012C22F26A43CC400476A6F /* PC Keyboard (iOS) */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 0012C24426A43CC400476A6F /* Build configuration list for PBXNativeTarget "Okay Keyboard (iOS)" */;
+			buildConfigurationList = 0012C24426A43CC400476A6F /* Build configuration list for PBXNativeTarget "PC Keyboard (iOS)" */;
 			buildPhases = (
 				0012C22C26A43CC400476A6F /* Sources */,
 				0012C22D26A43CC400476A6F /* Frameworks */,
@@ -157,14 +157,14 @@
 			dependencies = (
 				0012C25626A43D0F00476A6F /* PBXTargetDependency */,
 			);
-			name = "Okay Keyboard (iOS)";
+			name = "PC Keyboard (iOS)";
 			productName = "Okay Keyboard (iOS)";
-			productReference = 0012C23026A43CC400476A6F /* Okay Keyboard App.app */;
+			productReference = 0012C23026A43CC400476A6F /* PC Keyboard App.app */;
 			productType = "com.apple.product-type.application";
 		};
-		0012C23726A43CC400476A6F /* Okay Keyboard (macOS) */ = {
+		0012C23726A43CC400476A6F /* PC Keyboard (macOS) */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 0012C24726A43CC400476A6F /* Build configuration list for PBXNativeTarget "Okay Keyboard (macOS)" */;
+			buildConfigurationList = 0012C24726A43CC400476A6F /* Build configuration list for PBXNativeTarget "PC Keyboard (macOS)" */;
 			buildPhases = (
 				0012C23426A43CC400476A6F /* Sources */,
 				0012C23526A43CC400476A6F /* Frameworks */,
@@ -174,14 +174,14 @@
 			);
 			dependencies = (
 			);
-			name = "Okay Keyboard (macOS)";
+			name = "PC Keyboard (macOS)";
 			productName = "Okay Keyboard (macOS)";
-			productReference = 0012C23826A43CC400476A6F /* Okay Keyboard.app */;
+			productReference = 0012C23826A43CC400476A6F /* PC  Keyboard.app */;
 			productType = "com.apple.product-type.application";
 		};
-		0012C24F26A43D0F00476A6F /* Okay Keyboard */ = {
+		0012C24F26A43D0F00476A6F /* PC Keyboard */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 0012C25826A43D0F00476A6F /* Build configuration list for PBXNativeTarget "Okay Keyboard" */;
+			buildConfigurationList = 0012C25826A43D0F00476A6F /* Build configuration list for PBXNativeTarget "PC Keyboard" */;
 			buildPhases = (
 				0012C24C26A43D0F00476A6F /* Sources */,
 				0012C24D26A43D0F00476A6F /* Frameworks */,
@@ -191,9 +191,9 @@
 			);
 			dependencies = (
 			);
-			name = "Okay Keyboard";
+			name = "PC Keyboard";
 			productName = "Okay Keyboard";
-			productReference = 0012C25026A43D0F00476A6F /* Okay Keyboard.appex */;
+			productReference = 0012C25026A43D0F00476A6F /* PC Keyboard.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
@@ -216,7 +216,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 0012C22726A43CC300476A6F /* Build configuration list for PBXProject "Okay Keyboard" */;
+			buildConfigurationList = 0012C22726A43CC300476A6F /* Build configuration list for PBXProject "PC Keyboard" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -229,9 +229,9 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				0012C22F26A43CC400476A6F /* Okay Keyboard (iOS) */,
-				0012C23726A43CC400476A6F /* Okay Keyboard (macOS) */,
-				0012C24F26A43D0F00476A6F /* Okay Keyboard */,
+				0012C22F26A43CC400476A6F /* PC Keyboard (iOS) */,
+				0012C23726A43CC400476A6F /* PC Keyboard (macOS) */,
+				0012C24F26A43D0F00476A6F /* PC Keyboard */,
 			);
 		};
 /* End PBXProject section */
@@ -268,7 +268,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0012C23E26A43CC400476A6F /* ContentView.swift in Sources */,
-				0012C23C26A43CC400476A6F /* Okay_KeyboardApp.swift in Sources */,
+				0012C23C26A43CC400476A6F /* PC_KeyboardApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -277,7 +277,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0012C23F26A43CC400476A6F /* ContentView.swift in Sources */,
-				0012C23D26A43CC400476A6F /* Okay_KeyboardApp.swift in Sources */,
+				0012C23D26A43CC400476A6F /* PC_KeyboardApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -295,7 +295,7 @@
 /* Begin PBXTargetDependency section */
 		0012C25626A43D0F00476A6F /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 0012C24F26A43D0F00476A6F /* Okay Keyboard */;
+			target = 0012C24F26A43D0F00476A6F /* PC Keyboard */;
 			targetProxy = 0012C25526A43D0F00476A6F /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -428,11 +428,11 @@
 					"@executable_path/Frameworks",
 				);
 				OTHER_SWIFT_FLAGS = "";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.binary-studio.keyboard.Okay-Keyboard";
-				PRODUCT_NAME = "Okay Keyboard App";
+				PRODUCT_BUNDLE_IDENTIFIER = com.binarystudio.keyboard;
+				PRODUCT_NAME = "PC Keyboard App";
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -452,11 +452,11 @@
 					"@executable_path/Frameworks",
 				);
 				OTHER_SWIFT_FLAGS = "";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.binary-studio.keyboard.Okay-Keyboard";
-				PRODUCT_NAME = "Okay Keyboard App";
+				PRODUCT_BUNDLE_IDENTIFIER = com.binarystudio.keyboard;
+				PRODUCT_NAME = "PC Keyboard App";
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -479,8 +479,8 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.binary-studio.keyboard.Okay-Keyboard";
-				PRODUCT_NAME = "Okay Keyboard";
+				PRODUCT_BUNDLE_IDENTIFIER = com.binarystudio.keyboard.macos;
+				PRODUCT_NAME = "PC  Keyboard";
 				SDKROOT = macosx;
 				SWIFT_VERSION = 5.0;
 			};
@@ -504,8 +504,8 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.binary-studio.keyboard.Okay-Keyboard";
-				PRODUCT_NAME = "Okay Keyboard";
+				PRODUCT_BUNDLE_IDENTIFIER = com.binarystudio.keyboard.macos;
+				PRODUCT_NAME = "PC  Keyboard";
 				SDKROOT = macosx;
 				SWIFT_VERSION = 5.0;
 			};
@@ -516,7 +516,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 8435649556;
-				INFOPLIST_FILE = "Okay Keyboard/Info.plist";
+				INFOPLIST_FILE = "PC Keyboard/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -524,12 +524,12 @@
 					"@executable_path/../../Frameworks",
 				);
 				OTHER_SWIFT_FLAGS = "-Xfrontend -warn-long-expression-type-checking=100 -Xfrontend -warn-long-function-bodies=100";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.binary-studio.keyboard.Okay-Keyboard.Okay-Keyboard";
+				PRODUCT_BUNDLE_IDENTIFIER = com.binarystudio.keyboard.embedded;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -538,19 +538,19 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 8435649556;
-				INFOPLIST_FILE = "Okay Keyboard/Info.plist";
+				INFOPLIST_FILE = "PC Keyboard/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.binary-studio.keyboard.Okay-Keyboard.Okay-Keyboard";
+				PRODUCT_BUNDLE_IDENTIFIER = com.binarystudio.keyboard.embedded;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -558,7 +558,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		0012C22726A43CC300476A6F /* Build configuration list for PBXProject "Okay Keyboard" */ = {
+		0012C22726A43CC300476A6F /* Build configuration list for PBXProject "PC Keyboard" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				0012C24226A43CC400476A6F /* Debug */,
@@ -567,7 +567,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		0012C24426A43CC400476A6F /* Build configuration list for PBXNativeTarget "Okay Keyboard (iOS)" */ = {
+		0012C24426A43CC400476A6F /* Build configuration list for PBXNativeTarget "PC Keyboard (iOS)" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				0012C24526A43CC400476A6F /* Debug */,
@@ -576,7 +576,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		0012C24726A43CC400476A6F /* Build configuration list for PBXNativeTarget "Okay Keyboard (macOS)" */ = {
+		0012C24726A43CC400476A6F /* Build configuration list for PBXNativeTarget "PC Keyboard (macOS)" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				0012C24826A43CC400476A6F /* Debug */,
@@ -585,7 +585,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		0012C25826A43D0F00476A6F /* Build configuration list for PBXNativeTarget "Okay Keyboard" */ = {
+		0012C25826A43D0F00476A6F /* Build configuration list for PBXNativeTarget "PC Keyboard" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				0012C25926A43D0F00476A6F /* Debug */,
