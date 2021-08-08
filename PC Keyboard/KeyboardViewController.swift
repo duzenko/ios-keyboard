@@ -25,7 +25,7 @@ class KeyboardViewController: UIInputViewController {
         var groups = [UIStackView]()
         
         for row in 0...4 {
-            var rowKeys: [[String]] = ["←", " ", "GO"].unflat()
+            var rowKeys: [[String]] = ["←", " ", "⏎"].unflat()
             if row<4 {
                 let rowStart = row*10
                 let rowEnd = row*10+10
@@ -63,7 +63,7 @@ class KeyboardViewController: UIInputViewController {
     func createButtons(_ named: [[String]], _ withOptions: Bool) -> [UIButton] {
       return named.map { symbols in
         let attributedString = NSMutableAttributedString(string:"\(symbols[0])")
-        let attrs = [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 9.0)]
+        let attrs = [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 10.0)]
         if withOptions {
             let gString = NSMutableAttributedString(string:"\n", attributes:attrs)
             attributedString.append(gString)
@@ -111,8 +111,8 @@ class KeyboardViewController: UIInputViewController {
         {
             guard let btn = longPressGesture.view as! UIButton? else { return }
             var options: [String] = []
-            let x = btn.attributedTitle(for: .normal)!.string
-            let symbol = "\(x[x.startIndex])"
+            let title = btn.attributedTitle(for: .normal)!.string
+            let symbol = "\(title[title.startIndex])"
             for key in EnglishLayout {
                 if key[0] == symbol {
                     options = key
@@ -130,8 +130,9 @@ class KeyboardViewController: UIInputViewController {
             let tapLocation = longPressGesture.location(in: self.view)
             let w = btn.frame.width
             let h = btn.frame.height
-            
-            let popUpView=UIView(frame: CGRect(x: tapLocation.x-w*CGFloat(options.count)/2, y: tapLocation.y-h*1.5, width: w*CGFloat(options.count), height: h))
+            let x = max(0, tapLocation.x-w*CGFloat(options.count)/2)
+            let y = tapLocation.y > h*1.5 ? tapLocation.y-h*1.5 : h*3
+            let popUpView=UIView(frame: CGRect(x: x, y: y, width: w*CGFloat(options.count), height: h))
             self.popUpView = popUpView
             popUpView.backgroundColor=UIColor.white
             
@@ -152,7 +153,7 @@ class KeyboardViewController: UIInputViewController {
     @objc func buttonAction(sender: UIButton!) {
         let proxy = self.textDocumentProxy
         let title = sender.attributedTitle(for: .normal)!.string
-        if title=="GO" {
+        if title=="⏎" {
             proxy.insertText("\n")
             return
         }
