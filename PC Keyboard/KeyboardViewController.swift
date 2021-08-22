@@ -62,9 +62,9 @@ class KeyboardViewController: UIInputViewController {
 
     func createButtons(_ named: [[String]], _ withOptions: Bool) -> [UIButton] {
       return named.map { symbols in
-        let attributedString = NSMutableAttributedString(string:"\(symbols[0])")
-        let attrs = [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 10.0)]
+        let attributedString = NSMutableAttributedString(string:"\(symbols[0])", attributes: [NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 18)])
         if withOptions {
+            let attrs = [NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 11.0)]
             let gString = NSMutableAttributedString(string:"\n", attributes:attrs)
             attributedString.append(gString)
             for (index, symbol) in symbols.enumerated() {
@@ -82,11 +82,30 @@ class KeyboardViewController: UIInputViewController {
         button.setAttributedTitle(attributedString, for: .normal)
         button.backgroundColor = .white
         button.setTitleColor( .black , for: .normal)
-        button.addTarget(self, action: #selector(buttonAction), for: .touchUpInside)
+        button.addTarget(self, action: #selector(buttonUpAction), for: .touchUpInside)
+        button.addTarget(self, action: #selector(buttonDownAction), for: .touchDown)
         let longTouchRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(onButtonLongPressed))
         button.addGestureRecognizer(longTouchRecognizer)
         return button
       }
+    }
+    
+    @objc func buttonDownAction(btn: UIButton!) {
+        popUpView?.removeFromSuperview()
+        let xy = btn.convert(btn.bounds.origin, to: self.view)
+        let w = btn.frame.width
+        let h = btn.frame.height
+        let x = xy.x
+        let y = xy.y > h ? xy.y-h : h*3
+        let popUpView=UIView(frame: CGRect(x: x, y: y, width: w, height: h))
+        self.popUpView = popUpView
+        popUpView.backgroundColor=UIColor.white
+        let btn0: UIButton=UIButton(frame: CGRect(x: 0, y: 0, width: w, height: h))
+        let title = btn.attributedTitle(for: .normal)!.string
+        btn0.setTitle(title, for: .normal)
+        btn0.setTitleColor(UIColor.black, for: .normal)
+        popUpView.addSubview(btn0)
+        self.view.addSubview(popUpView)
     }
     
     @objc func onButtonLongPressed (_ longPressGesture: UILongPressGestureRecognizer)
@@ -132,6 +151,7 @@ class KeyboardViewController: UIInputViewController {
             let h = btn.frame.height
             let x = max(0, tapLocation.x-w*CGFloat(options.count)/2)
             let y = tapLocation.y > h*1.5 ? tapLocation.y-h*1.5 : h*3
+            popUpView?.removeFromSuperview()
             let popUpView=UIView(frame: CGRect(x: x, y: y, width: w*CGFloat(options.count), height: h))
             self.popUpView = popUpView
             popUpView.backgroundColor=UIColor.white
@@ -139,10 +159,9 @@ class KeyboardViewController: UIInputViewController {
             for (index, option) in options.enumerated() {
                 let btn0: UIButton=UIButton(frame: CGRect(x: CGFloat(index)*w, y: 0, width: w, height: h))
                 btn0.setTitle(option, for: .normal)
-                btn0.setTitleColor(UIColor.black, for: .normal);
+                btn0.setTitleColor(UIColor.black, for: .normal)
                 btn0.layer.borderWidth=0.5
                 btn0.layer.borderColor=UIColor.lightGray.cgColor
-                
                 popUpView.addSubview(btn0)
             }
                            
@@ -150,7 +169,8 @@ class KeyboardViewController: UIInputViewController {
         }
     }
     
-    @objc func buttonAction(sender: UIButton!) {
+    @objc func buttonUpAction(sender: UIButton!) {
+        popUpView?.removeFromSuperview()
         let proxy = self.textDocumentProxy
         let title = sender.attributedTitle(for: .normal)!.string
         if title=="⏎" {
