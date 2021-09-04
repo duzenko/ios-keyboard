@@ -515,6 +515,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = 8435649556;
 				INFOPLIST_FILE = "PC Keyboard/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
@@ -523,7 +524,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				OTHER_SWIFT_FLAGS = "-Xfrontend -warn-long-expression-type-checking=100 -Xfrontend -warn-long-function-bodies=100";
+				OTHER_SWIFT_FLAGS = "-Xfrontend -warn-long-expression-type-checking=33 -Xfrontend -warn-long-function-bodies=99";
 				PRODUCT_BUNDLE_IDENTIFIER = com.binarystudio.keyboard.embedded;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
@@ -537,6 +538,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = 8435649556;
 				INFOPLIST_FILE = "PC Keyboard/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 14.4;

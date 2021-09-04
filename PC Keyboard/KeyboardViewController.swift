@@ -10,6 +10,7 @@ import UIKit
 class KeyboardViewController: UIInputViewController {
 
     var popUpView: UIView?
+    let englishLayout = getEnglishLayout()
     
     override func updateViewConstraints() {
         super.updateViewConstraints()
@@ -17,10 +18,10 @@ class KeyboardViewController: UIInputViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        makeABCbtns()
+        makeButtonRows()
     }
     
-    private func makeABCbtns(){
+    func makeButtonRows() {
         let abcBtnView = self.view!
         var groups = [UIStackView]()
         
@@ -29,7 +30,7 @@ class KeyboardViewController: UIInputViewController {
             if row<4 {
                 let rowStart = row*10
                 let rowEnd = row*10+10
-                rowKeys = Array(EnglishLayout[rowStart..<rowEnd])
+                rowKeys = Array(englishLayout[rowStart..<rowEnd])
             }
             let group = createButtons(rowKeys, row<4)
             let subStackView = UIStackView(arrangedSubviews: group)
@@ -51,17 +52,16 @@ class KeyboardViewController: UIInputViewController {
         stackView.distribution = .fillEqually
         stackView.spacing = 4
         stackView.translatesAutoresizingMaskIntoConstraints = false
-        
+
         abcBtnView.addSubview(stackView)
-        
+
         stackView.leadingAnchor.constraint (equalTo: abcBtnView.leadingAnchor,  constant: 0).isActive = true
         stackView.topAnchor.constraint     (equalTo: abcBtnView.topAnchor,      constant: 0).isActive = true
         stackView.trailingAnchor.constraint(equalTo: abcBtnView.trailingAnchor, constant: 0).isActive = true
         stackView.bottomAnchor.constraint  (equalTo: abcBtnView.bottomAnchor,   constant: 0).isActive = true
     }
-
-    func createButtons(_ named: [[String]], _ withOptions: Bool) -> [UIButton] {
-      return named.map { symbols in
+    
+    func createButton(_ symbols: [String], _ withOptions: Bool) -> UIButton {
         let attributedString = NSMutableAttributedString(string:"\(symbols[0])", attributes: [NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 18)])
         if withOptions {
             let attrs = [NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 11.0)]
@@ -84,13 +84,25 @@ class KeyboardViewController: UIInputViewController {
         button.setTitleColor( .black , for: .normal)
         button.addTarget(self, action: #selector(buttonUpAction), for: .touchUpInside)
         button.addTarget(self, action: #selector(buttonDownAction), for: .touchDown)
-        let longTouchRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(onButtonLongPressed))
-        button.addGestureRecognizer(longTouchRecognizer)
+        if(withOptions) {
+            let longTouchRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(onButtonLongPressed))
+            button.addGestureRecognizer(longTouchRecognizer)
+        }
+        button.tag = withOptions ? 0 : 1;
         return button
+    }
+
+    func createButtons(_ named: [[String]], _ withOptions: Bool) -> [UIButton] {
+      return named.map { symbols in
+        return createButton(symbols, withOptions)
       }
     }
     
     @objc func buttonDownAction(btn: UIButton!) {
+        btn.backgroundColor = .lightGray
+        if(btn.tag == 1) {
+            return;
+        }
         popUpView?.removeFromSuperview()
         let xy = btn.convert(btn.bounds.origin, to: self.view)
         let w = btn.frame.width
@@ -103,8 +115,54 @@ class KeyboardViewController: UIInputViewController {
         let btn0: UIButton=UIButton(frame: CGRect(x: 0, y: 0, width: w, height: h))
         let title = btn.attributedTitle(for: .normal)!.string
         btn0.setTitle(title, for: .normal)
-        btn0.setTitleColor(UIColor.black, for: .normal)
+        btn0.setTitleColor(.white, for: .normal)
+        btn0.backgroundColor = .black
+        btn0.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
         popUpView.addSubview(btn0)
+        self.view.addSubview(popUpView)
+    }
+    
+    func showOptions(_ longPressGesture: UILongPressGestureRecognizer) {
+        guard let btn = longPressGesture.view as! UIButton? else { return }
+        var options: [String] = []
+        let title = btn.attributedTitle(for: .normal)!.string
+        let symbol = "\(title[title.startIndex])"
+        for key in englishLayout {
+            if key[0] == symbol {
+                options = key
+                break
+            }
+        }
+        if options.isEmpty {
+            return
+        }
+        let lowerCase = options[0].lowercased()
+        if lowerCase != options[0] {
+            options.insert(lowerCase, at: 1)
+        }
+        
+        let tapLocation = longPressGesture.location(in: self.view)
+        let w = btn.frame.width
+        let h = btn.frame.height
+        let tmp = CGFloat(options.count)
+        let xOffset = w*tmp/2;
+        let x = max(0, tapLocation.x-xOffset)
+        let y = tapLocation.y > h*1.5 ? tapLocation.y-h*1.5 : h*3
+        popUpView?.removeFromSuperview()
+        let popUpView=UIView(frame: CGRect(x: x, y: y, width: w*CGFloat(options.count), height: h))
+        self.popUpView = popUpView
+        popUpView.backgroundColor = .black
+        
+        for (index, option) in options.enumerated() {
+            let btn0: UIButton=UIButton(frame: CGRect(x: CGFloat(index)*w, y: 0, width: w, height: h))
+            btn0.setTitle(option, for: .normal)
+            btn0.setTitleColor(UIColor.white, for: .normal)
+            btn0.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
+            btn0.layer.borderWidth=0.5
+            btn0.layer.borderColor=UIColor.lightGray.cgColor
+            popUpView.addSubview(btn0)
+        }
+                       
         self.view.addSubview(popUpView)
     }
     
@@ -114,62 +172,27 @@ class KeyboardViewController: UIInputViewController {
             let tapLocation = longPressGesture.location(in: popUpView)
             let btnIndex = Int(tapLocation.x) / Int(longPressGesture.view!.frame.width)
             for (index, element) in popUpView!.subviews.enumerated() {
-                element.backgroundColor = index == btnIndex ? UIColor.green : UIColor.white
+                element.backgroundColor = index == btnIndex ? .darkGray : .clear
             }
         }
         if (longPressGesture.state == .ended && popUpView != nil) {
+            guard let btn = longPressGesture.view as! UIButton? else { return }
+            btn.backgroundColor = .white
             let proxy = self.textDocumentProxy
             for element in popUpView!.subviews {
-                if(element.backgroundColor==UIColor.green) {
+                if(element.backgroundColor == .darkGray) {
                     proxy.insertText((element as! UIButton).title(for: .normal)!)
                 }
             }
             popUpView?.removeFromSuperview()
         }
-        if (longPressGesture.state == .began)
-        {
-            guard let btn = longPressGesture.view as! UIButton? else { return }
-            var options: [String] = []
-            let title = btn.attributedTitle(for: .normal)!.string
-            let symbol = "\(title[title.startIndex])"
-            for key in EnglishLayout {
-                if key[0] == symbol {
-                    options = key
-                    break
-                }
-            }
-            if options.isEmpty {
-                return
-            }
-            let lowerCase = options[0].lowercased()
-            if lowerCase != options[0] {
-                options.insert(lowerCase, at: 1)
-            }
-            
-            let tapLocation = longPressGesture.location(in: self.view)
-            let w = btn.frame.width
-            let h = btn.frame.height
-            let x = max(0, tapLocation.x-w*CGFloat(options.count)/2)
-            let y = tapLocation.y > h*1.5 ? tapLocation.y-h*1.5 : h*3
-            popUpView?.removeFromSuperview()
-            let popUpView=UIView(frame: CGRect(x: x, y: y, width: w*CGFloat(options.count), height: h))
-            self.popUpView = popUpView
-            popUpView.backgroundColor=UIColor.white
-            
-            for (index, option) in options.enumerated() {
-                let btn0: UIButton=UIButton(frame: CGRect(x: CGFloat(index)*w, y: 0, width: w, height: h))
-                btn0.setTitle(option, for: .normal)
-                btn0.setTitleColor(UIColor.black, for: .normal)
-                btn0.layer.borderWidth=0.5
-                btn0.layer.borderColor=UIColor.lightGray.cgColor
-                popUpView.addSubview(btn0)
-            }
-                           
-            self.view.addSubview(popUpView)
+        if (longPressGesture.state == .began) {
+            showOptions(longPressGesture)
         }
     }
     
     @objc func buttonUpAction(sender: UIButton!) {
+        sender.backgroundColor = .white
         popUpView?.removeFromSuperview()
         let proxy = self.textDocumentProxy
         let title = sender.attributedTitle(for: .normal)!.string
