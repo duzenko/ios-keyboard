@@ -87,8 +87,9 @@ class KeyboardViewController: UIInputViewController {
         if(withOptions) {
             let longTouchRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(onButtonLongPressed))
             button.addGestureRecognizer(longTouchRecognizer)
+            button.contentEdgeInsets = UIEdgeInsets.init(top: -0, left: 0, bottom: -0, right: 0)
         }
-        button.tag = withOptions ? 0 : 1;
+        button.tag = withOptions ? 0 : symbols.first == "←" ? 2 : 1;
         return button
     }
 
@@ -98,9 +99,17 @@ class KeyboardViewController: UIInputViewController {
       }
     }
     
+    var timer: Timer?;
+    
     @objc func buttonDownAction(btn: UIButton!) {
         btn.backgroundColor = .lightGray
-        if(btn.tag == 1) {
+        if(btn.tag == 2) {
+            timer = Timer.scheduledTimer(withTimeInterval: 0.2, repeats: true, block: { (_) in
+                let proxy = self.textDocumentProxy
+                proxy.deleteBackward()
+            })
+        }
+        if(btn.tag >= 1) {
             return;
         }
         popUpView?.removeFromSuperview()
@@ -203,6 +212,8 @@ class KeyboardViewController: UIInputViewController {
         var key = title[title.startIndex].uppercased()
         switch key {
         case "←":
+            timer?.invalidate()
+            timer = nil
             proxy.deleteBackward()
         default:
             if let contents = proxy.documentContextBeforeInput {

@@ -16,6 +16,7 @@
 		0012C25326A43D0F00476A6F /* KeyboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0012C25226A43D0F00476A6F /* KeyboardViewController.swift */; };
 		0012C25726A43D0F00476A6F /* PC Keyboard.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 0012C25026A43D0F00476A6F /* PC Keyboard.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		0049E45526B69CDA009774A6 /* Layouts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0049E45426B69CDA009774A6 /* Layouts.swift */; };
+		0054956526F7441C0011A047 /* SwiftUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0054956426F7441C0011A047 /* SwiftUIView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,6 +56,7 @@
 		0012C25226A43D0F00476A6F /* KeyboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardViewController.swift; sourceTree = "<group>"; };
 		0012C25426A43D0F00476A6F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0049E45426B69CDA009774A6 /* Layouts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Layouts.swift; sourceTree = "<group>"; };
+		0054956426F7441C0011A047 /* SwiftUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUIView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -136,6 +138,7 @@
 				0012C25226A43D0F00476A6F /* KeyboardViewController.swift */,
 				0012C25426A43D0F00476A6F /* Info.plist */,
 				0049E45426B69CDA009774A6 /* Layouts.swift */,
+				0054956426F7441C0011A047 /* SwiftUIView.swift */,
 			);
 			path = "PC Keyboard";
 			sourceTree = "<group>";
@@ -287,6 +290,7 @@
 			files = (
 				0012C25326A43D0F00476A6F /* KeyboardViewController.swift in Sources */,
 				0049E45526B69CDA009774A6 /* Layouts.swift in Sources */,
+				0054956526F7441C0011A047 /* SwiftUIView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -419,6 +423,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = 8435649556;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = iOS/Info.plist;
@@ -443,6 +448,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = 8435649556;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = iOS/Info.plist;
@@ -515,7 +521,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = 8435649556;
 				INFOPLIST_FILE = "PC Keyboard/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
@@ -538,7 +544,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = 8435649556;
 				INFOPLIST_FILE = "PC Keyboard/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
