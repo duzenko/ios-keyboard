@@ -20,6 +20,7 @@ func getLayoutRow(_ row: Int) -> [[String]] {
 
 struct KeyButton: View {
     let keyOptions: [String]
+    @State private var didTap:Bool = false
     
     var body: some View {
         Button(action: {
@@ -28,17 +29,22 @@ struct KeyButton: View {
             ZStack(alignment: .bottomTrailing) {
                 Text(keyOptions.first!).frame(maxWidth: .infinity, maxHeight: .infinity).offset(x: -4, y: -4)
                 if(keyOptions.count>1) {
-                    Text(keyOptions.joined().dropFirst()).font(.system(size: 11, weight: .bold)).offset(x: -2, y: -2)
+                    Text(keyOptions.joined().dropFirst()).font(.system(size: 12)).offset(x: -2, y: -2)
                 }
             }.frame(maxWidth: .infinity, maxHeight: .infinity)
             .gesture(        DragGesture(minimumDistance: 0)
                                 .onChanged { value in
+                                    didTap = true
+                                    NotificationCenter.default.post(name: Notification.Name("keyPreview"), object: nil, userInfo: ["key":keyOptions.first!])
                                     print("onChanged", value)
                                 }
-                                .onEnded { x in
-                                    print("onEnded", x)
+                                .onEnded { value in
+                                    didTap = false
+                                    NotificationCenter.default.post(name: Notification.Name("keyPress"), object: nil, userInfo: ["key":keyOptions.first!])
+                                    NotificationCenter.default.post(name: Notification.Name("keyPreview"), object: nil, userInfo: [:])
+                                    print("onEnded", value)
                                 })
-        }).foregroundColor(Color.black)
+        }).foregroundColor(Color.black).background(Color(didTap ? .lightGray : .white))
     }
 }
 
@@ -52,10 +58,9 @@ struct KeyRow: View {
         HStack(spacing: 4) {
             ForEach(rowKeys, id: \.self) {rowKey in
                 if (rowKeys.count>3) {
-                    KeyButton (keyOptions: rowKey).frame(maxWidth: .infinity, maxHeight: .infinity).background(Color(.white)).border(Color.gray, width: 1)
-                        //.aspectRatio(0.5, contentMode: .fill)
+                    KeyButton (keyOptions: rowKey).frame(maxWidth: .infinity, maxHeight: .infinity).border(Color.gray, width: 1)
                 } else {
-                    KeyButton (keyOptions: rowKey).frame(maxWidth: .infinity, maxHeight: .infinity).background(Color(.white)).border(Color.gray, width: 1)
+                    KeyButton (keyOptions: rowKey).frame(maxWidth: rowKey.first == " " ? .infinity : 66, maxHeight: .infinity).background(Color(.white)).border(Color.gray, width: 1)
                 }
             }
         }.alignmentGuide(.top, computeValue: { d in
@@ -69,45 +74,27 @@ struct KeyRow: View {
 
 struct SwiftUIView: View {
     
-    var popUpView: UIView?
+//    var popUpView: UIView?
+    @State private var previewKey: String?
+
+    let pub = NotificationCenter.default
+            .publisher(for: NSNotification.Name("keyPreview"))
     
     var body: some View {
-        VStack(spacing: 4) {
-            ForEach(0..<5) { row in
-                KeyRow(rowKeys: getLayoutRow(row)).frame(maxHeight: .infinity)
+        ZStack(alignment: .bottom) {
+            VStack(spacing: 4) {
+                ForEach(0..<5) { row in
+                    KeyRow(rowKeys: getLayoutRow(row)).frame(maxHeight: .infinity)
+                }
+            }
+            if(previewKey != nil) {
+                Text(previewKey!).foregroundColor(.white).padding(6).offset(y: -3).background(Color(.darkGray))
             }
         }.padding(2)
-    }
-    
-    func makeButtonRows() {
-//        let abcBtnView = self
-//        var groups = [UIStackView]()
-//
-//        for row in 0...4 {
-//            subStackView.distribution = .fillProportionally
-//            subStackView.spacing = 4
-//            if row == 4 {
-//                for (index, element) in subStackView.subviews.enumerated() {
-//                    if index != 1 {
-//                        element.widthAnchor.constraint(equalTo: subStackView.subviews[1].widthAnchor, multiplier: 0.5).isActive = true
-//                    }
-//                }
-//            }
-//            groups.append(subStackView)
-//        }
-        
-//        let stackView = UIStackView(arrangedSubviews: groups)
-//        stackView.axis = .vertical
-//        stackView.distribution = .fillEqually
-//        stackView.spacing = 4
-//        stackView.translatesAutoresizingMaskIntoConstraints = false
-
-//        stackView.leadingAnchor.constraint (equalTo: abcBtnView.leadingAnchor,  constant: 0).isActive = true
-//        stackView.topAnchor.constraint     (equalTo: abcBtnView.topAnchor,      constant: 0).isActive = true
-//        stackView.trailingAnchor.constraint(equalTo: abcBtnView.trailingAnchor, constant: 0).isActive = true
-//        stackView.bottomAnchor.constraint  (equalTo: abcBtnView.bottomAnchor,   constant: 0).isActive = true
-        
-//        return stackView
+        .onReceive(pub) { (output) in
+            print(output)
+            previewKey = output.userInfo!["key"] as! String?
+        }
     }
     
     /*func createButton(_ symbols: [String], _ withOptions: Bool) -> UIButton {
@@ -141,13 +128,7 @@ struct SwiftUIView: View {
         button.tag = withOptions ? 0 : symbols.first == "←" ? 2 : 1;
         return button
     }
-
-    func createButtons(_ named: [[String]], _ withOptions: Bool) -> [UIButton] {
-      return named.map { symbols in
-        return createButton(symbols, withOptions)
-      }
-    }
-    
+  
     var timer: Timer?;
     
     @objc func buttonDownAction(btn: UIButton!) {
@@ -248,41 +229,7 @@ struct SwiftUIView: View {
             showOptions(longPressGesture)
         }
     }
-    
-    @objc func buttonUpAction(sender: UIButton!) {
-        sender.backgroundColor = .white
-        popUpView?.removeFromSuperview()
-        let proxy = self.textDocumentProxy
-        let title = sender.attributedTitle(for: .normal)!.string
-        if title=="⏎" {
-            proxy.insertText("\n")
-            return
-        }
-        var key = title[title.startIndex].uppercased()
-        switch key {
-        case "←":
-            timer?.invalidate()
-            timer = nil
-            proxy.deleteBackward()
-        default:
-            if let contents = proxy.documentContextBeforeInput {
-                outerLoop: for char in contents.reversed() {
-                    switch char {
-                    case " ":
-                        break;
-                    case ".", "\n":
-                        break outerLoop
-                    default:
-                        key = key.lowercased()
-                        break outerLoop
-                    }
-                }
-            }
-            proxy.insertText(key)
-        }
     }*/
-    
-
 }
 
 struct SwiftUIView_Previews: PreviewProvider {
