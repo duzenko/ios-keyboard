@@ -22,16 +22,35 @@ class KeyboardViewController: UIInputViewController {
         view.addSubview(hostingController.view)
         addChild(hostingController)
         NotificationCenter.default.addObserver(self, selector: #selector(self.methodOfReceivedNotification(notification:)), name: Notification.Name("keyPress"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.methodOfReceivedNotification(notification:)), name: Notification.Name("keyPreview"), object: nil)
     }
     
     @objc func methodOfReceivedNotification(notification: Notification) {
-        print(notification.name)
         switch notification.name.rawValue {
         case "keyPress":
             return onKeyPress(notification.userInfo!["key"]! as! String)
+        case "keyPreview":
+            return onKeyPreview(notification.userInfo!["key"] as! String?)
         default:
             break;
         }
+    }
+
+    var timer: Timer?;
+
+    func onKeyPreview(_ title: String?) {
+        if(title != "←") {
+            timer?.invalidate()
+            timer = nil
+            return
+        }
+        if(timer != nil) {
+            return
+        }
+        timer = Timer.scheduledTimer(withTimeInterval: 0.2, repeats: true, block: { (_) in
+            let proxy = self.textDocumentProxy
+            proxy.deleteBackward()
+        })
     }
     
     func onKeyPress(_ title: String) {
@@ -43,8 +62,6 @@ class KeyboardViewController: UIInputViewController {
         var key = title[title.startIndex].uppercased()
         switch key {
         case "←":
-//            timer?.invalidate()
-//            timer = nil
             proxy.deleteBackward()
         default:
             if let contents = proxy.documentContextBeforeInput {

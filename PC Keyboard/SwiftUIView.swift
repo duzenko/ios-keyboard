@@ -8,43 +8,41 @@
 import SwiftUI
 
 let englishLayout = getEnglishLayout()
-
-func getLayoutRow(_ row: Int) -> [[String]] {
-    if row<4 {
-        let rowStart = row*10
-        let rowEnd = row*10+10
-        return Array(englishLayout[rowStart..<rowEnd])
-    }
-    return ["←", " ", "⏎"].unflat()
-}
+let ctrlRow = ["←", " ", "⏎"].unflat();
 
 struct KeyButton: View {
     let keyOptions: [String]
+    var maxWidth: CGFloat = .infinity
+    
     @State private var didTap:Bool = false
     
     var body: some View {
-        Button(action: {
-            print("action")
-        }, label: {
             ZStack(alignment: .bottomTrailing) {
-                Text(keyOptions.first!).frame(maxWidth: .infinity, maxHeight: .infinity).offset(x: -4, y: -4)
+                Text(keyOptions.first!)
+                    .frame(maxWidth: maxWidth, maxHeight: .infinity)
+                    .offset(x: -4, y: -4)
                 if(keyOptions.count>1) {
-                    Text(keyOptions.joined().dropFirst()).font(.system(size: 12)).offset(x: -2, y: -2)
+                    Text(keyOptions.joined(separator: " ").dropFirst()).font(.system(size: 12))
+                        .offset(x: -2, y: -2)
                 }
-            }.frame(maxWidth: .infinity, maxHeight: .infinity)
-            .gesture(        DragGesture(minimumDistance: 0)
-                                .onChanged { value in
-                                    didTap = true
-                                    NotificationCenter.default.post(name: Notification.Name("keyPreview"), object: nil, userInfo: ["key":keyOptions.first!])
-                                    print("onChanged", value)
-                                }
-                                .onEnded { value in
-                                    didTap = false
-                                    NotificationCenter.default.post(name: Notification.Name("keyPress"), object: nil, userInfo: ["key":keyOptions.first!])
-                                    NotificationCenter.default.post(name: Notification.Name("keyPreview"), object: nil, userInfo: [:])
-                                    print("onEnded", value)
-                                })
-        }).foregroundColor(Color.black).background(Color(didTap ? .lightGray : .white))
+            }
+        .background(Color(didTap ? .lightGray : .white))
+        .padding(2)
+        .contentShape(Rectangle())
+        .gesture(
+            DragGesture(minimumDistance: 0)
+                .onChanged { value in
+                    didTap = true
+                    NotificationCenter.default.post(name: Notification.Name("keyPreview"), object: nil, userInfo: ["key":keyOptions.first!])
+//                    print("onChanged", value)
+                }
+                .onEnded { value in
+                    didTap = false
+                    NotificationCenter.default.post(name: Notification.Name("keyPreview"), object: nil, userInfo: [:])
+                    NotificationCenter.default.post(name: Notification.Name("keyPress"), object: nil, userInfo: ["key":keyOptions.first!])
+//                    print("onEnded", value)
+                }
+        )
     }
 }
 
@@ -55,26 +53,16 @@ struct KeyRow: View {
     private var height: CGFloat = .zero // < calculable height
     
     var body: some View {
-        HStack(spacing: 4) {
-            ForEach(rowKeys, id: \.self) {rowKey in
-                if (rowKeys.count>3) {
-                    KeyButton (keyOptions: rowKey).frame(maxWidth: .infinity, maxHeight: .infinity).border(Color.gray, width: 1)
-                } else {
-                    KeyButton (keyOptions: rowKey).frame(maxWidth: rowKey.first == " " ? .infinity : 66, maxHeight: .infinity).background(Color(.white)).border(Color.gray, width: 1)
+            HStack(spacing: 0) {
+                ForEach(rowKeys, id: \.self) {rowKey in
+                    KeyButton (keyOptions: rowKey, maxWidth: rowKey.first == " " ? .infinity : 66)
                 }
             }
-        }.alignmentGuide(.top, computeValue: { d in
-            DispatchQueue.main.async { // << dynamically detected - needs to be async !!
-                self.height = max(d.height, self.height)
-            }
-            return d[.top]
-        })
     }
 }
 
 struct SwiftUIView: View {
     
-//    var popUpView: UIView?
     @State private var previewKey: String?
 
     let pub = NotificationCenter.default
@@ -82,17 +70,19 @@ struct SwiftUIView: View {
     
     var body: some View {
         ZStack(alignment: .bottom) {
-            VStack(spacing: 4) {
-                ForEach(0..<5) { row in
-                    KeyRow(rowKeys: getLayoutRow(row)).frame(maxHeight: .infinity)
+            VStack(spacing: 0) {
+                ForEach(0..<englishLayout.count) { row in
+                    KeyRow(rowKeys: englishLayout[row]).frame(maxHeight: .infinity)
                 }
+                KeyRow(rowKeys: ctrlRow).frame(maxHeight: .infinity)
             }
+            .background(Color.init(red: 212.0/255, green: 214.0/255, blue: 221.0/255))
             if(previewKey != nil) {
                 Text(previewKey!).foregroundColor(.white).padding(6).offset(y: -3).background(Color(.darkGray))
             }
-        }.padding(2)
+        }
         .onReceive(pub) { (output) in
-            print(output)
+//            print(output)
             previewKey = output.userInfo!["key"] as! String?
         }
     }
@@ -129,15 +119,10 @@ struct SwiftUIView: View {
         return button
     }
   
-    var timer: Timer?;
     
     @objc func buttonDownAction(btn: UIButton!) {
         btn.backgroundColor = .lightGray
         if(btn.tag == 2) {
-            timer = Timer.scheduledTimer(withTimeInterval: 0.2, repeats: true, block: { (_) in
-                let proxy = self.textDocumentProxy
-                proxy.deleteBackward()
-            })
         }
         if(btn.tag >= 1) {
             return;

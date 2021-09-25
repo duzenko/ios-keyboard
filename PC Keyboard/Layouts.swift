@@ -7,27 +7,16 @@
 
 import Foundation
 
-struct KeyOption {
-    let red, green, blue: Double
-    init(red: Double, green: Double, blue: Double) {
-        self.red   = red
-        self.green = green
-        self.blue  = blue
-    }
-    init(white: Double) {
-        red   = white
-        green = white
-        blue  = white
-    }
-}
-
 extension Array {
     func unflat() -> [[Element]] {
         return self.map{[$0]}
     }
 }
 
-func getEnglishLayout() -> [[String]] {
+func getEnglishLayout() -> [[[String]]] {
+    let qwerty = ["Q", "W", "E", "R", "T", "Y", "U", "I"].unflat()
+    let asdfghj = ["A", "S", "D", "F", "G", "H", "J"].unflat()
+    let zxcvbnm = ["Z", "X", "C", "V", "B", "N", "M"].unflat()
     return [
         [
             ["1", "!", "`", "~"],
@@ -41,22 +30,19 @@ func getEnglishLayout() -> [[String]] {
             ["9", "(", "-", "_"],
             ["0", ")", "=", "+"],
         ],
-        ["Q", "W", "E", "R", "T", "Y", "U", "I"].unflat(),
-        [
+        qwerty + [
             ["O", "[", "{"],
-            ["P", "]", "}"],
+            ["P", "]", "}"]
         ],
-        ["A", "S", "D", "F", "G", "H", "J"].unflat(),
-        [
+        asdfghj + [
             ["K", ";", ":"],
             ["L", "'", "\""],
             ["\\", "|"],
         ],
-        ["Z", "X", "C", "V", "B", "N", "M"].unflat(),
-        [
+        zxcvbnm + [
             [",", "<"],
             [".", ">"],
             ["/", "?"],
         ]
-    ].flatMap({ $0 })
+    ]
 }
