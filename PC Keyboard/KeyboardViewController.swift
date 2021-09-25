@@ -28,7 +28,7 @@ class KeyboardViewController: UIInputViewController {
     @objc func methodOfReceivedNotification(notification: Notification) {
         switch notification.name.rawValue {
         case "keyPress":
-            return onKeyPress(notification.userInfo!["key"]! as! String)
+            return onKeyPress(notification.userInfo!["key"]! as! String, notification.userInfo!["autoCase"] as! Bool)
         case "keyPreview":
             return onKeyPreview(notification.userInfo!["key"] as! String?)
         default:
@@ -53,27 +53,30 @@ class KeyboardViewController: UIInputViewController {
         })
     }
     
-    func onKeyPress(_ title: String) {
+    func onKeyPress(_ title: String, _ autoCase: Bool) {
         let proxy = self.textDocumentProxy
         if title=="⏎" {
             proxy.insertText("\n")
             return
         }
-        var key = title[title.startIndex].uppercased()
+        var key = title
         switch key {
         case "←":
             proxy.deleteBackward()
         default:
-            if let contents = proxy.documentContextBeforeInput {
-                outerLoop: for char in contents.reversed() {
-                    switch char {
-                    case " ":
-                        break;
-                    case ".", "\n":
-                        break outerLoop
-                    default:
-                        key = key.lowercased()
-                        break outerLoop
+            if(autoCase) {
+                key = key.uppercased()
+                if let contents = proxy.documentContextBeforeInput {
+                    outerLoop: for char in contents.reversed() {
+                        switch char {
+                        case " ":
+                            break;
+                        case ".", "\n":
+                            break outerLoop
+                        default:
+                            key = key.lowercased()
+                            break outerLoop
+                        }
                     }
                 }
             }
