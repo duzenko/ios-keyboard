@@ -42,7 +42,7 @@ struct KeyButton: View {
             DragGesture(minimumDistance: 0)
                 .onChanged { value in
                     if popup.options != nil {
-                        let dx = (value.location.x - value.startLocation.x - 8) / 16;
+                        let dx = (value.location.x - value.startLocation.x + 8) / 16;
                         var selIndex = Int(dx.rounded(.down)) % keyOptions.count
 //                        print( dx, selIndex, (selIndex + keyOptions.count) % keyOptions.count )
                         selIndex = (selIndex + keyOptions.count) % keyOptions.count

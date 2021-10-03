@@ -64,8 +64,10 @@ class KeyboardViewController: UIInputViewController {
         case "←":
             proxy.deleteBackward()
         default:
-            if(autoCase) {
-                key = key.uppercased()
+            if autoCase {
+                if [.emailAddress, .URL, .webSearch].contains(proxy.keyboardType)  {
+                    key = key.lowercased()
+                } else {
                 if let contents = proxy.documentContextBeforeInput {
                     outerLoop: for char in contents.reversed() {
                         switch char {
@@ -78,6 +80,7 @@ class KeyboardViewController: UIInputViewController {
                             break outerLoop
                         }
                     }
+                }
                 }
             }
             proxy.insertText(key)
