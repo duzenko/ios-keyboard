@@ -21,7 +21,8 @@ struct KeyButton: View {
     let keyOptions: [String]
     var maxWidth: CGFloat = .infinity
     var isCtrlKey: Bool = false
-
+    @Environment(\.colorScheme) var colorScheme
+    
     @State private var didTap:Bool = false
     
     var body: some View {
@@ -34,16 +35,16 @@ struct KeyButton: View {
                         .offset(x: -2, y: -2)
                 }
             }
-        .background(Color(didTap ? .lightGray : .white))
+            .background(Color(colorScheme == .dark ? (didTap ? .darkGray : .black) : (didTap ? .lightGray : .white) ))
         .padding(2)
         .contentShape(Rectangle())
         .gesture(
             DragGesture(minimumDistance: 0)
                 .onChanged { value in
                     if popup.options != nil {
-                        let dx = (value.location.x - value.startLocation.x) / 16;
+                        let dx = (value.location.x - value.startLocation.x - 8) / 16;
                         var selIndex = Int(dx.rounded(.down)) % keyOptions.count
-                        print( dx, selIndex, (selIndex + keyOptions.count) % keyOptions.count )
+//                        print( dx, selIndex, (selIndex + keyOptions.count) % keyOptions.count )
                         selIndex = (selIndex + keyOptions.count) % keyOptions.count
                         popup.selectedOption = keyOptions[selIndex]
                     }
@@ -52,14 +53,15 @@ struct KeyButton: View {
                     }
                     didTap = true
                     NotificationCenter.default.post(name: Notification.Name("keyPreview"), object: nil, userInfo: ["key":keyOptions.first!])
-                    print("onChanged", value)
+//                    print("onChanged", value)
                     if !isCtrlKey {
-                        popupTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: false, block: { (_) in
+                        popupTimer = Timer.scheduledTimer(withTimeInterval: 0.7, repeats: false, block: { (_) in
                             let first = keyOptions.first!
                             popup.options = keyOptions
                             if first != first.lowercased() {
                                 popup.options?.insert(first.lowercased(), at: 1)
                             }
+                            popup.selectedOption = keyOptions[0]
                         })
                     }
                 }
@@ -74,7 +76,7 @@ struct KeyButton: View {
                     popup.options = nil
                     popup.selectedOption = nil
                     popupTimer?.invalidate()
-                    print("onEnded", value)
+//                    print("onEnded", value)
                 }
         )
     }
@@ -96,9 +98,8 @@ struct KeyRow: View {
 }
 
 struct SwiftUIView: View {
-    
+    @Environment(\.colorScheme) var colorScheme
     @State private var previewKey: String?
-    
     @ObservedObject var viewModel : PopupInfo = popup
     
     let pubPreview = NotificationCenter.default
@@ -112,7 +113,7 @@ struct SwiftUIView: View {
                 }
                 KeyRow(rowKeys: ctrlRow).frame(maxHeight: .infinity)
             }
-            .background(Color.init(red: 212.0/255, green: 214.0/255, blue: 221.0/255))
+            .background(colorScheme == .dark ? Color(.darkGray) : Color.init(red: 212.0/255, green: 214.0/255, blue: 221.0/255))
             if(previewKey != nil) {
                 if(popup.options != nil) {
                     HStack(spacing:0) {
@@ -121,7 +122,7 @@ struct SwiftUIView: View {
                                 .padding(6)
                                 .foregroundColor(.white)
                                 .font(Font.body.weight(option == popup.selectedOption ? .bold : .medium))
-                                .background(Color(option == popup.selectedOption ? .black : .darkGray))
+                                .background(Color(option == popup.selectedOption ? (colorScheme == .dark ? .gray : .black ) : .darkGray))
                         }
                     }.offset(y: -5)
                 } else {
