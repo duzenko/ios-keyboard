@@ -8,7 +8,12 @@
 import SwiftUI
 
 let englishLayout = getEnglishLayout()
-let ctrlRow = ["←", " ", "⏎"].unflat();
+let ctrlRow = ["←", " ", "🌐", "⏎"].filter({ s in
+    if UIDevice.current.userInterfaceIdiom == .phone && s == "🌐" {
+        return false
+    }
+    return true
+}).unflat();
 
 class PopupInfo: ObservableObject {
     @Published var options: [String]?
@@ -42,11 +47,12 @@ struct KeyButton: View {
             DragGesture(minimumDistance: 0)
                 .onChanged { value in
                     if popup.options != nil {
+                        let popupOptions = popup.options!
                         let dx = (value.location.x - value.startLocation.x + 8) / 16;
-                        var selIndex = Int(dx.rounded(.down)) % keyOptions.count
-//                        print( dx, selIndex, (selIndex + keyOptions.count) % keyOptions.count )
-                        selIndex = (selIndex + keyOptions.count) % keyOptions.count
-                        popup.selectedOption = keyOptions[selIndex]
+                        var selIndex = Int(dx.rounded(.down)) % popupOptions.count
+//                        print( dx, selIndex, (selIndex + keyOptions.count) % popupOptions.count )
+                        selIndex = (selIndex + popupOptions.count) % popupOptions.count
+                        popup.selectedOption = popupOptions[selIndex]
                     }
                     if(didTap) {
                         return
@@ -111,8 +117,9 @@ struct SwiftUIView: View {
                 ForEach(0..<englishLayout.count) { row in
                     KeyRow(rowKeys: englishLayout[row]).frame(maxHeight: .infinity)
                 }
-                KeyRow(rowKeys: ctrlRow).frame(maxHeight: .infinity)
+                KeyRow(rowKeys: ctrlRow).frame(maxWidth: 444, maxHeight: .infinity)
             }
+            .frame(maxWidth: .infinity)
             .background(colorScheme == .dark ? Color(.darkGray) : Color.init(red: 212.0/255, green: 214.0/255, blue: 221.0/255))
             if(previewKey != nil) {
                 if(popup.options != nil) {

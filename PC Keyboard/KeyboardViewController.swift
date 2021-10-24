@@ -59,6 +59,10 @@ class KeyboardViewController: UIInputViewController {
             proxy.insertText("\n")
             return
         }
+        if title=="🌐" {
+            self.advanceToNextInputMode()
+            return
+        }
         var key = title
         switch key {
         case "←":
