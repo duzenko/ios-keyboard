@@ -24,11 +24,12 @@ var popupTimer: Timer?
 
 struct KeyButton: View {
     let keyOptions: [String]
+    let darkBackground = UIColor.init(white: 1, alpha: 0.3)
     var maxWidth: CGFloat = .infinity
     var isCtrlKey: Bool = false
     @Environment(\.colorScheme) var colorScheme
     
-    @State private var didTap:Bool = false
+    @State private var didTap: Bool = false
     
     var body: some View {
             ZStack(alignment: .bottomTrailing) {
@@ -40,7 +41,7 @@ struct KeyButton: View {
                         .offset(x: -2, y: -2)
                 }
             }
-            .background(Color(colorScheme == .dark ? (didTap ? .darkGray : .black) : (didTap ? .lightGray : .white) ))
+            .background(Color(colorScheme == .dark ? (didTap ? .lightGray : darkBackground) : (didTap ? .lightGray : .white) ))
         .padding(2)
         .contentShape(Rectangle())
         .gesture(
@@ -48,9 +49,8 @@ struct KeyButton: View {
                 .onChanged { value in
                     if popup.options != nil {
                         let popupOptions = popup.options!
-                        let dx = (value.location.x - value.startLocation.x + 8) / 16;
+                        let dx = (value.location.x - value.startLocation.x + 8) / 25;
                         var selIndex = Int(dx.rounded(.down)) % popupOptions.count
-//                        print( dx, selIndex, (selIndex + keyOptions.count) % popupOptions.count )
                         selIndex = (selIndex + popupOptions.count) % popupOptions.count
                         popup.selectedOption = popupOptions[selIndex]
                     }
@@ -59,7 +59,6 @@ struct KeyButton: View {
                     }
                     didTap = true
                     NotificationCenter.default.post(name: Notification.Name("keyPreview"), object: nil, userInfo: ["key":keyOptions.first!])
-//                    print("onChanged", value)
                     if !isCtrlKey {
                         popupTimer = Timer.scheduledTimer(withTimeInterval: 0.7, repeats: false, block: { (_) in
                             let first = keyOptions.first!
@@ -111,6 +110,8 @@ struct SwiftUIView: View {
     let pubPreview = NotificationCenter.default
             .publisher(for: NSNotification.Name("keyPreview"))
 
+    let optionBackground = UIColor.init(white: 0, alpha: 0.3)
+
     var body: some View {
         ZStack(alignment: .bottom) {
             VStack(spacing: 0) {
@@ -120,7 +121,6 @@ struct SwiftUIView: View {
                 KeyRow(rowKeys: ctrlRow).frame(maxWidth: 444, maxHeight: .infinity)
             }
             .frame(maxWidth: .infinity)
-            .background(colorScheme == .dark ? Color(.darkGray) : Color.init(red: 212.0/255, green: 214.0/255, blue: 221.0/255))
             if(previewKey != nil) {
                 if(popup.options != nil) {
                     HStack(spacing:0) {
@@ -129,7 +129,7 @@ struct SwiftUIView: View {
                                 .padding(6)
                                 .foregroundColor(.white)
                                 .font(Font.body.weight(option == popup.selectedOption ? .bold : .medium))
-                                .background(Color(option == popup.selectedOption ? (colorScheme == .dark ? .gray : .black ) : .darkGray))
+                                .background(Color(option == popup.selectedOption ? (colorScheme == .dark ? .black : .black ) : optionBackground))
                         }
                     }.offset(y: -5)
                 } else {

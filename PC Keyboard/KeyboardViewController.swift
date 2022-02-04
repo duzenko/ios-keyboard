@@ -19,6 +19,7 @@ class KeyboardViewController: UIInputViewController {
         print("viewDidLoad")
         let hostingController = UIHostingController(rootView: SwiftUIView())
         hostingController.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        hostingController.view.backgroundColor = .clear
         view.addSubview(hostingController.view)
         addChild(hostingController)
         NotificationCenter.default.addObserver(self, selector: #selector(self.methodOfReceivedNotification(notification:)), name: Notification.Name("keyPress"), object: nil)
