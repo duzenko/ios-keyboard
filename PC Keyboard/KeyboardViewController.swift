@@ -78,7 +78,7 @@ class KeyboardViewController: UIInputViewController {
                         switch char {
                         case " ":
                             break;
-                        case ".", "\n":
+                        case ".", "\n", "!", "?":
                             break outerLoop
                         default:
                             key = key.lowercased()
