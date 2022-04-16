@@ -8,12 +8,13 @@
 import SwiftUI
 
 let englishLayout = getEnglishLayout()
-let ctrlRow = ["←", " ", "🌐", "⏎"].filter({ s in
+func _filter (s: String) -> Bool {
     if UIDevice.current.userInterfaceIdiom == .phone && s == "🌐" {
         return false
     }
     return true
-}).unflat();
+}
+let ctrlRow = ["←", " ", "🌐", "⏎"].filter(_filter).unflat()
 
 class PopupInfo: ObservableObject {
     @Published var options: [String]?
@@ -22,10 +23,44 @@ class PopupInfo: ObservableObject {
 let popup = PopupInfo.init()
 var popupTimer: Timer?
 
+private extension KeyButton {
+    func location2index(value: DragGesture.Value) -> Int {
+        let popupOptions = popup.options!
+        let dx = ((value.location.x - value.startLocation.x + 8) / 25).rounded(.down);
+        let dxr = Int(dx)
+        var selIndex = dxr % popupOptions.count
+        selIndex = (selIndex + popupOptions.count) % popupOptions.count
+        return selIndex
+    }
+    
+    func dragChanged(value: DragGesture.Value) {
+        if popup.options != nil {
+            let selIndex = location2index(value: value)
+            let popupOptions = popup.options!
+            popup.selectedOption = popupOptions[selIndex]
+        }
+        if didTap {
+            return
+        }
+        didTap = true
+        NotificationCenter.default.post(name: Notification.Name("keyPreview"), object: nil, userInfo: ["key":keyOptions.first!])
+        if !isCtrlKey {
+            popupTimer = Timer.scheduledTimer(withTimeInterval: 0.7, repeats: false, block: { (_) in
+                let first = keyOptions.first!
+                popup.options = keyOptions
+                if first != first.lowercased() {
+                    popup.options?.insert(first.lowercased(), at: 1)
+                }
+                popup.selectedOption = keyOptions[0]
+            })
+        }
+    }
+}
+
 struct KeyButton: View {
     let keyOptions: [String]
     let darkBackground = UIColor.init(white: 1, alpha: 0.3)
-    var maxWidth: CGFloat = .infinity
+    var maxWidth: CGFloat
     var isCtrlKey: Bool = false
     @Environment(\.colorScheme) var colorScheme
     
@@ -43,32 +78,12 @@ struct KeyButton: View {
             }
             .background(Color(colorScheme == .dark ? (didTap ? .lightGray : darkBackground) : (didTap ? .lightGray : .white) ))
         .padding(2)
+        .frame(minWidth: nil, idealWidth: nil, maxWidth: nil, minHeight: 40, idealHeight: nil, maxHeight: nil, alignment: .center)
         .contentShape(Rectangle())
         .gesture(
             DragGesture(minimumDistance: 0)
                 .onChanged { value in
-                    if popup.options != nil {
-                        let popupOptions = popup.options!
-                        let dx = (value.location.x - value.startLocation.x + 8) / 25;
-                        var selIndex = Int(dx.rounded(.down)) % popupOptions.count
-                        selIndex = (selIndex + popupOptions.count) % popupOptions.count
-                        popup.selectedOption = popupOptions[selIndex]
-                    }
-                    if(didTap) {
-                        return
-                    }
-                    didTap = true
-                    NotificationCenter.default.post(name: Notification.Name("keyPreview"), object: nil, userInfo: ["key":keyOptions.first!])
-                    if !isCtrlKey {
-                        popupTimer = Timer.scheduledTimer(withTimeInterval: 0.7, repeats: false, block: { (_) in
-                            let first = keyOptions.first!
-                            popup.options = keyOptions
-                            if first != first.lowercased() {
-                                popup.options?.insert(first.lowercased(), at: 1)
-                            }
-                            popup.selectedOption = keyOptions[0]
-                        })
-                    }
+                    dragChanged(value:value)
                 }
                 .onEnded { value in
                     NotificationCenter.default.post(name: Notification.Name("keyPreview"), object: nil, userInfo: [:])
@@ -115,7 +130,7 @@ struct SwiftUIView: View {
     var body: some View {
         ZStack(alignment: .bottom) {
             VStack(spacing: 0) {
-                ForEach(0..<englishLayout.count) { row in
+                ForEach(0..<englishLayout.count, id:\.self) { row in
                     KeyRow(rowKeys: englishLayout[row]).frame(maxHeight: .infinity)
                 }
                 KeyRow(rowKeys: ctrlRow).frame(maxWidth: 444, maxHeight: .infinity)

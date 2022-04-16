@@ -5,25 +5,24 @@
 //  Created by a on 18.07.2021.
 //
 
-import UIKit
 import SwiftUI
+import KeyboardKit
 
-class KeyboardViewController: UIInputViewController {
-
-    override func updateViewConstraints() {
-        super.updateViewConstraints()
-    }
-    
+class KeyboardViewController: KeyboardInputViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("viewDidLoad")
-        let hostingController = UIHostingController(rootView: SwiftUIView())
-        hostingController.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        hostingController.view.backgroundColor = .clear
-        view.addSubview(hostingController.view)
-        addChild(hostingController)
         NotificationCenter.default.addObserver(self, selector: #selector(self.methodOfReceivedNotification(notification:)), name: Notification.Name("keyPress"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.methodOfReceivedNotification(notification:)), name: Notification.Name("keyPreview"), object: nil)
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        NotificationCenter.default.removeObserver(self, name: Notification.Name("keyPress"), object: nil)
+        NotificationCenter.default.removeObserver(self, name: Notification.Name("keyPreview"), object: nil)
+    }
+    
+    override func viewWillSetupKeyboard() {
+        super.viewWillSetupKeyboard()
+        setup(with: SwiftUIView())
     }
     
     @objc func methodOfReceivedNotification(notification: Notification) {

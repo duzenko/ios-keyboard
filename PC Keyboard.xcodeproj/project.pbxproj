@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -17,6 +17,8 @@
 		0012C25726A43D0F00476A6F /* PC Keyboard.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 0012C25026A43D0F00476A6F /* PC Keyboard.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		0049E45526B69CDA009774A6 /* Layouts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0049E45426B69CDA009774A6 /* Layouts.swift */; };
 		0054956526F7441C0011A047 /* SwiftUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0054956426F7441C0011A047 /* SwiftUIView.swift */; };
+		006AAF83280A9BD6003ADA93 /* KeyboardKit in Frameworks */ = {isa = PBXBuildFile; productRef = 006AAF82280A9BD6003ADA93 /* KeyboardKit */; };
+		006AAF86280A9D32003ADA93 /* KeyboardKit in Frameworks */ = {isa = PBXBuildFile; productRef = 006AAF85280A9D32003ADA93 /* KeyboardKit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -64,6 +66,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				006AAF83280A9BD6003ADA93 /* KeyboardKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,6 +81,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				006AAF86280A9D32003ADA93 /* KeyboardKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -92,6 +96,7 @@
 				0012C23926A43CC400476A6F /* macOS */,
 				0012C25126A43D0F00476A6F /* PC Keyboard */,
 				0012C23126A43CC400476A6F /* Products */,
+				006AAF84280A9D32003ADA93 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -143,6 +148,13 @@
 			path = "PC Keyboard";
 			sourceTree = "<group>";
 		};
+		006AAF84280A9D32003ADA93 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -161,6 +173,9 @@
 				0012C25626A43D0F00476A6F /* PBXTargetDependency */,
 			);
 			name = "PC Keyboard (iOS)";
+			packageProductDependencies = (
+				006AAF82280A9BD6003ADA93 /* KeyboardKit */,
+			);
 			productName = "Okay Keyboard (iOS)";
 			productReference = 0012C23026A43CC400476A6F /* PC Keyboard App.app */;
 			productType = "com.apple.product-type.application";
@@ -195,6 +210,9 @@
 			dependencies = (
 			);
 			name = "PC Keyboard";
+			packageProductDependencies = (
+				006AAF85280A9D32003ADA93 /* KeyboardKit */,
+			);
 			productName = "Okay Keyboard";
 			productReference = 0012C25026A43D0F00476A6F /* PC Keyboard.appex */;
 			productType = "com.apple.product-type.app-extension";
@@ -228,6 +246,9 @@
 				Base,
 			);
 			mainGroup = 0012C22326A43CC300476A6F;
+			packageReferences = (
+				006AAF81280A9BD6003ADA93 /* XCRemoteSwiftPackageReference "KeyboardKit" */,
+			);
 			productRefGroup = 0012C23126A43CC400476A6F /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -607,6 +628,30 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		006AAF81280A9BD6003ADA93 /* XCRemoteSwiftPackageReference "KeyboardKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/KeyboardKit/KeyboardKit.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		006AAF82280A9BD6003ADA93 /* KeyboardKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 006AAF81280A9BD6003ADA93 /* XCRemoteSwiftPackageReference "KeyboardKit" */;
+			productName = KeyboardKit;
+		};
+		006AAF85280A9D32003ADA93 /* KeyboardKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 006AAF81280A9BD6003ADA93 /* XCRemoteSwiftPackageReference "KeyboardKit" */;
+			productName = KeyboardKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 0012C22426A43CC300476A6F /* Project object */;
 }
